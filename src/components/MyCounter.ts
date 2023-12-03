@@ -1,14 +1,11 @@
 let renderCount = 0;
 
 export class MyCounter extends HTMLElement {
-  public onSetCount: (count: number) => void = () => {};
-  public blah: number;
+  onSetCount: ((count: number) => void) | undefined;
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-
-    this.blah = 1231231213;
   }
 
   // Define the 'name' prop
@@ -28,7 +25,7 @@ export class MyCounter extends HTMLElement {
   setCount(count: number) {
     this.setAttribute("count", `${count}`);
 
-    this.onSetCount(count);
+    if (this.onSetCount) this.onSetCount(count);
   }
 
   incrementCount() {
@@ -45,11 +42,11 @@ export class MyCounter extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
         <p>renderCount: ${renderCount}</p>
-        <p>val: ${this.getCount()}! This is a custom greeting!</p>
-        ${this.blah}asd
+        <p>count: ${this.getCount()}</p>
+
         <div>
-          <button type="button" class="increment-button">+</button>
-          <button type="button" class="decrement-button">-</button>
+        <button type="button" class="decrement-button">-</button>
+        <button type="button" class="increment-button">+</button>
         </div>
       `;
 

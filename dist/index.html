@@ -8,16 +8,12 @@
     <script type="module" src="./components/MyCounter.js"></script>
     <link href="./css/output.css" rel="stylesheet" />
   </head>
-  <body class="p-10">
-    <button id="counter-button">click me</button>
-
+  <body>
     <my-counter id="counter" count="asd" />
 
     <script>
-      const counterButton = document.getElementById("counter-button");
       const counter = document.getElementById("counter");
 
-      counterButton?.addEventListener("click", () => counter.setCount(42));
       counter.onSetCount = () => window.alert(123);
     </script>
   </body>
