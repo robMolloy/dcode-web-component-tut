@@ -27,6 +27,7 @@ export class MyCounter extends HTMLElement {
 
   setCount(count: number) {
     this.setAttribute("count", `${count}`);
+
     this.onSetCount(count);
   }
 
