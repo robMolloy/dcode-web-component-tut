@@ -1,0 +1,14 @@
+{
+  "name": "dcode-web-component-tut",
+  "version": "1.0.0",
+  "description": "https://www.youtube.com/watch?v=GxupG6ZnKBA",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.5"
+  }
+}

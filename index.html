@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter</title>
+    <script type="module" src="./src/components/MyCounter.js"></script>
+    <link href="./dist/css/output.css" rel="stylesheet" />
+  </head>
+  <body class="p-10">
+    <button id="counter-button">click me</button>
+
+    <my-counter id="counter" count="asd" />
+
+    <script>
+      const counterButton = document.getElementById("counter-button");
+      const counter = document.getElementById("counter");
+
+      counterButton?.addEventListener("click", () => counter.setCount(42));
+      counter.onSetCount = () => window.alert(123);
+    </script>
+  </body>
+</html>
