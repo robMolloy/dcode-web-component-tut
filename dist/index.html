@@ -9,12 +9,29 @@
     <link href="./css/output.css" rel="stylesheet" />
   </head>
   <body>
-    <my-counter id="counter" count="asd" />
+    <button onclick="removeCounter()">remove my counter</button>
+    <br />
+    <button onclick="addCounter()">add my counter</button>
+    <br />
+    <br />
+
+    <my-counter id="counter"></my-counter>
 
     <script>
-      const counter = document.getElementById("counter");
+      const myCounter = document.querySelector("my-counter");
+      myCounter.addEventListener("save", (e) => {
+        console.log("save event", { detail: e.detail.value });
+      });
 
-      counter.onSetCount = () => window.alert(123);
+      const removeCounter = () => {
+        document.querySelector("my-counter").remove();
+      };
+      const addCounter = () => {
+        document.body.insertAdjacentHTML(
+          "beforeend",
+          `<my-counter id="counter"></my-counter>`
+        );
+      };
     </script>
   </body>
 </html>

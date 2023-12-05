@@ -1,22 +1,24 @@
 let renderCount = 0;
 
+const attributeNames = ["count"] as const;
+
 export class MyCounter extends HTMLElement {
   onSetCount: ((count: number) => void) | undefined;
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    if (attributeNames.every((attName) => this.getAttribute(attName) === null))
+      this.render();
   }
 
   // Define the 'name' prop
   static get observedAttributes() {
-    return ["count"];
+    return attributeNames;
   }
 
   // Handle changes to the observed attributes
-  attributeChangedCallback() {
-    this.render();
-  }
+  attributeChangedCallback() {}
 
   getCount() {
     return parseInt(this.getAttribute("count") || "0") || 0;
@@ -24,6 +26,7 @@ export class MyCounter extends HTMLElement {
 
   setCount(count: number) {
     this.setAttribute("count", `${count}`);
+    this.render();
 
     if (this.onSetCount) this.onSetCount(count);
   }
@@ -35,27 +38,53 @@ export class MyCounter extends HTMLElement {
     this.setCount(this.getCount() - 1);
   }
 
-  render() {
-    renderCount += 1;
+  initRender() {
+    const shadowRoot = this.shadowRoot as NonNullable<typeof this.shadowRoot>;
 
-    if (!this.shadowRoot) return;
+    shadowRoot.innerHTML = `<style>@import url('./css/output.css');</style>
+    <div id="main"></div>`;
+  }
 
-    this.shadowRoot.innerHTML = `
-        <p>renderCount: ${renderCount}</p>
-        <p>count: ${this.getCount()}</p>
+  contentRender() {
+    const shadowRoot = this.shadowRoot as NonNullable<typeof this.shadowRoot>;
+    const main = shadowRoot.querySelector("#main");
 
-        <div>
-        <button type="button" class="decrement-button">-</button>
-        <button type="button" class="increment-button">+</button>
-        </div>
-      `;
+    if (!main) return;
 
-    const shadowRoot = this.shadowRoot;
+    main.innerHTML = `
+    <p>renderCount: ${renderCount}</p>
+    <p class="p-10 my-container bg-red-500">count: ${this.getCount()}</p>
+    
+    <div>
+    <button type="button" class="decrement-button">-</button>
+    <button type="button" class="increment-button">+</button>
+    
+    <button class="save-button">Save</button>
+    
+    </div>
+    `;
+
     const incrementButton = shadowRoot.querySelector(".increment-button");
+    const saveButton = shadowRoot.querySelector(".save-button");
     const decrementButton = shadowRoot.querySelector(".decrement-button");
 
     incrementButton?.addEventListener("click", () => this.incrementCount());
     decrementButton?.addEventListener("click", () => this.decrementCount());
+    const savePayload = { detail: { value: this.getCount() } };
+
+    const saveEvent = new CustomEvent("save", savePayload);
+    saveButton?.addEventListener("click", () => {
+      this.dispatchEvent(saveEvent);
+    });
+  }
+
+  render() {
+    renderCount += 1;
+
+    if (!this.shadowRoot) return;
+    else if (!this.shadowRoot.innerHTML) this.initRender();
+
+    this.contentRender();
   }
 }
 
